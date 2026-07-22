@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: >-
+  If you use this artifact, please cite the accompanying manuscript
+  (submitted to STTT) and this repository.
+type: software
+title: >-
+  TAMF: A Reusable Attacker-Modeling Framework for Practical Tamarin-Based
+  Cryptographic Verification -- Reproduction Artifact
+version: "0.1.0"
+date-released: "2026-07-22"
+license: Apache-2.0
+authors:
+  - family-names: Mieno
+    given-names: Takehiko
+    orcid: "https://orcid.org/0009-0002-1646-2333"
+    email: mieno.takehiko2@exc.epson.co.jp
+keywords:
+  - Tamarin Prover
+  - Symbolic verification
+  - Attacker model
+  - KEMTLS
+  - TLS 1.3
+  - 5G AKA
+  - Observational equivalence
+  - Reproducibility
+preferred-citation:
+  type: article
+  title: >-
+    TAMF: A Reusable Attacker-Modeling Framework for Practical
+    Tamarin-Based Cryptographic Verification
+  authors:
+    - family-names: Mieno
+      given-names: Takehiko
+      orcid: "https://orcid.org/0009-0002-1646-2333"
+  year: 2026
+  journal: >-
+    International Journal on Software Tools for Technology Transfer (submitted)
