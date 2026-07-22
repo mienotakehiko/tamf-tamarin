@@ -109,3 +109,92 @@ computes the verdict mechanically from `summary.tsv`.
 
 Pre-registration frozen at:  **[user to append UTC timestamp when the
 battery is launched, in `battery.log` first line]**
+
+---
+
+## Post-hoc addendum (rev089, 2026-07-22)
+
+The pre-registered design and its four-verdict interpretation rules above
+are **not amended**. This addendum records two post-hoc analyses added
+after the pre-registered battery had completed and after the SECONDARY
+verdict had been assigned. Neither analysis changes the SECONDARY verdict
+or the pre-registered manuscript action; both address strict-review
+comments on the mechanism-level attribution of Contribution C2.
+
+### A1 — Wall-clock co-growth analysis for the timeout-curve (rev089 §F-α)
+
+**Trigger**: strict-review comment that peak-RSS monotone growth on A
+(raw) could be a GHC generational-GC watermark artifact rather than
+proof-search state expansion.
+
+**Analysis**: For the timeout-curve measurements already collected under
+the pre-registered protocol, we tabulated the wall-clock consumed on A
+at the four budgets alongside the pre-registered peak-RSS values.
+Observed (from
+`measurements/timeout-curve/A_raw-{60,120,300,600}s-rep{1,2,3}.time.txt`):
+
+| Budget (s) | Mean wall-clock A (s) | Peak-RSS range A (GiB) |
+|-----------:|----------------------:|------------------------:|
+| 60         | 61.4                  | 1.68 – 1.97             |
+| 120        | 122.7                 | 2.06 – 2.13             |
+| 300        | 306.8                 | 3.24 – 3.76             |
+| 600        | 610.5                 | 5.45 – 5.94             |
+
+Wall-clock scales as ≈100 % of the outer budget in every cell, which is
+consistent with active proof-search throughout each timeout and
+inconsistent with the process idling in a GC pause. Under joint
+interpretation with the peak-RSS growth, the direction of RSS change is
+attributable to proof-search state expansion rather than to
+generational-GC watermark accumulation. **The pre-committed B3 caveat
+("peak RSS is an upper bound on live-heap-plus-GC-watermark; absolute
+magnitudes are not tight state-space measurements") is unchanged** and
+applies to absolute magnitudes; the addendum concerns only the direction
+of change.
+
+**Impact on verdict**: none. The SECONDARY verdict is unchanged. The
+manuscript text of §3 (Overall Outcomes, timeout-curve paragraph) is
+revised to state both quantities (wall-clock and RSS) jointly, with the
+B3 caveat referenced inline.
+
+### A2 — Mechanism-level attribution of the RSS shoulder under `-S`/`-c` (rev089 §F-β)
+
+**Trigger**: strict-review comment that the previous rev088 wording
+("plausible cache-inflation mechanism" for the 21–22 GiB peak RSS on the
+carrier under `-S` and `-c`) attributes an internal mechanism to Tamarin
+without evidence that could be gathered from `--diff`-mode observations
+alone.
+
+**Analysis**: We do not add a new experiment. Instead, we remove the
+mechanistic attribution from the manuscript. The 21–22 GiB peak RSS
+observed on the carrier under `-S`/`-c` is reported as an empirical
+pattern only; identifying its internal mechanism would require
+instrumenting Tamarin's proof-search kernel (goal-ranking traces,
+substitution-cache statistics via GHC's `+RTS -s`), which was not part
+of the pre-registered battery and is disclosed as future work.
+
+**Impact on verdict**: none. The SECONDARY verdict, the four-verdict
+interpretation table, and the pre-committed manuscript action are all
+unchanged. The revised manuscript text of §3.4 (Robustness Battery
+Verdict paragraph) records the RSS shoulder as an empirical pattern and
+disclaims mechanistic attribution.
+
+### Files affected by this addendum
+
+The following files ship with the evidence bundle for rev089:
+
+- `measurements/timeout-curve/A_raw-*.time.txt` and
+  `measurements/timeout-curve/C_state_carrier-*.time.txt` — the
+  wall-clock and peak-RSS raw data underlying A1 (already collected
+  under the original pre-registration; no re-execution).
+- `runs/battery_report_v3.md` and `runs/battery_validation_v3.txt` —
+  unchanged; verdict remains `SECONDARY`, validation remains
+  `PASS_WITH_REGISTERED_DEVIATION`.
+- `docs/deviation_notice_v3.md` — unchanged; documents the invalid `p`
+  factor rejected by Tamarin 1.12.0.
+
+### Compliance statement
+
+Neither A1 nor A2 modifies any measurement, any verdict, or any
+pre-committed manuscript action. Both are strict-review-driven
+refinements of how the pre-registered data is discussed in the
+manuscript, not changes to the data or its interpretation rules.

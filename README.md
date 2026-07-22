@@ -1,6 +1,6 @@
 # TAMF -- Reproduction Artifact
 
-Manuscript: *TAMF: Tamarin Attacker-Modeling Framework for Practical Tamarin-Based Cryptographic Verification* 
+Manuscript: *TAMF: A Reusable Attacker-Modeling Framework for Practical Tamarin-Based Cryptographic Verification* 
 Author: Takehiko Mieno
 &nbsp;·&nbsp;
 [ORCID 0009-0002-1646-2333](https://orcid.org/0009-0002-1646-2333)
