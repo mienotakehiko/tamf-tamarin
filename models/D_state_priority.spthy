@@ -1,0 +1,143 @@
+// Day-2 bounded observational-equivalence benchmark v2.5
+// Query budget: two pre-challenge and two post-challenge decryption queries.
+theory IND_CCA2_Adaptive_STATE_ONLY
+begin
+
+builtins: hashing, asymmetric-encryption
+
+rule Setup:
+    [ Fr(~kid), Fr(~sk) ]
+  --[ SetupDone(~kid) ]->
+    [ !Ltk(~kid, ~sk)
+    , Out(pk(~sk))
+    , State_Progress(~kid, 'pre_make1',
+        h('ha0'), h('hb0'), 'ea0', 'eb0', 'ma0', 'mb0', 'q0')
+    ]
+
+
+rule RegisterPre1:
+    let c = aenc(<m, ~r>, pk(sk))
+    in
+    [ In(m), Fr(~r), !Ltk(kid, sk)
+    , State_Progress(kid, 'pre_make1',
+        ha, hb, ea, eb, ma, mb, 'q0')[+]
+    ]
+  --[ CiphertextRegistered(kid, 'pre1', c) ]->
+    [ Out(c), !DecEntry(kid, 'pre1', c, m)
+    , State_Progress(kid, 'pre_dec1',
+        ha, hb, ea, eb, ma, mb, 'q0')
+    ]
+
+rule DecryptPre1:
+    [ In(c), !DecEntry(kid, 'pre1', c, m)
+    , State_Progress(kid, 'pre_dec1',
+        ha, hb, ea, eb, ma, mb, 'q0')[+]
+    ]
+  --[ PreOracleQuery(kid, 'pre1', c) ]->
+    [ Out(m)
+    , State_Progress(kid, 'pre_make2',
+        h(<ha,'pre1'>), h(<hb,'pre1'>), h(<ea,'step'>), h(<eb,'step'>), ma, mb, 'q1')
+    ]
+
+
+rule RegisterPre2:
+    let c = aenc(<m, ~r>, pk(sk))
+    in
+    [ In(m), Fr(~r), !Ltk(kid, sk)
+    , State_Progress(kid, 'pre_make2',
+        ha, hb, ea, eb, ma, mb, 'q1')[+]
+    ]
+  --[ CiphertextRegistered(kid, 'pre2', c) ]->
+    [ Out(c), !DecEntry(kid, 'pre2', c, m)
+    , State_Progress(kid, 'pre_dec2',
+        ha, hb, ea, eb, ma, mb, 'q1')
+    ]
+
+rule DecryptPre2:
+    [ In(c), !DecEntry(kid, 'pre2', c, m)
+    , State_Progress(kid, 'pre_dec2',
+        ha, hb, ea, eb, ma, mb, 'q1')[+]
+    ]
+  --[ PreOracleQuery(kid, 'pre2', c) ]->
+    [ Out(m)
+    , State_Progress(kid, 'challenge',
+        h(<ha,'pre2'>), h(<hb,'pre2'>), h(<ea,'step'>), h(<eb,'step'>), ma, mb, 'q2')
+    ]
+
+
+rule IssueChallenge:
+    let c_star = aenc(<diff(m0, m1), ~r_star>, pk(sk))
+    in
+    [ In(<m0,m1>), Fr(~r_star), !Ltk(kid, sk)
+    , State_Progress(kid, 'challenge',
+        ha, hb, ea, eb, ma, mb, 'q2')[+]
+    ]
+  --[ ChallengeIssued(kid, c_star) ]->
+    [ Out(c_star)
+    , State_Progress(kid, 'post_make1',
+        ha, hb, h(<ea,'challenge'>), h(<eb,'challenge'>), ma, mb, 'q2')
+    ]
+
+
+rule RegisterPost1:
+    let c = aenc(<m, ~r>, pk(sk))
+    in
+    [ In(m), Fr(~r), !Ltk(kid, sk)
+    , State_Progress(kid, 'post_make1',
+        ha, hb, ea, eb, ma, mb, 'q2')[+]
+    ]
+  --[ CiphertextRegistered(kid, 'post1', c) ]->
+    [ Out(c), !DecEntry(kid, 'post1', c, m)
+    , State_Progress(kid, 'post_dec1',
+        ha, hb, ea, eb, ma, mb, 'q2')
+    ]
+
+rule DecryptPost1:
+    [ In(c), !DecEntry(kid, 'post1', c, m)
+    , State_Progress(kid, 'post_dec1',
+        ha, hb, ea, eb, ma, mb, 'q2')[+]
+    ]
+  --[ PostOracleQuery(kid, 'post1', c) ]->
+    [ Out(m)
+    , State_Progress(kid, 'post_make2',
+        h(<ha,'post1'>), h(<hb,'post1'>), h(<ea,'step'>), h(<eb,'step'>), ma, mb, 'q3')
+    ]
+
+
+rule RegisterPost2:
+    let c = aenc(<m, ~r>, pk(sk))
+    in
+    [ In(m), Fr(~r), !Ltk(kid, sk)
+    , State_Progress(kid, 'post_make2',
+        ha, hb, ea, eb, ma, mb, 'q3')[+]
+    ]
+  --[ CiphertextRegistered(kid, 'post2', c) ]->
+    [ Out(c), !DecEntry(kid, 'post2', c, m)
+    , State_Progress(kid, 'post_dec2',
+        ha, hb, ea, eb, ma, mb, 'q3')
+    ]
+
+rule DecryptPost2:
+    [ In(c), !DecEntry(kid, 'post2', c, m)
+    , State_Progress(kid, 'post_dec2',
+        ha, hb, ea, eb, ma, mb, 'q3')[+]
+    ]
+  --[ PostOracleQuery(kid, 'post2', c) ]->
+    [ Out(m)
+    , State_Progress(kid, 'finish',
+        h(<ha,'post2'>), h(<hb,'post2'>), h(<ea,'step'>), h(<eb,'step'>), ma, mb, 'q4')
+    ]
+
+
+rule Finish:
+    [ In('finish')
+    , State_Progress(kid, 'finish',
+        ha, hb, ea, eb, ma, mb, 'q4')[+]
+    ]
+  --[ Finished(kid) ]->
+    [ Out('done')
+    , State_Progress(kid, 'done',
+        ha, hb, ea, eb, ma, mb, 'q4')
+    ]
+
+end

@@ -1,0 +1,42 @@
+theory ObsEq_StateOnly
+/*
+  ONE-CARRIER encoding: the eight scattered premises are consolidated into a
+  single State_Progress carrier tuple. This is condition C (state_only) /
+  and the state factor of D (full_tamf). Under --heuristic=s this VERIFIES
+  (paper: 9/9 per encoding at budgets >= 120s; median wall ~71.68s). Run:
+
+      tamarin-prover --prove --diff --heuristic=s obseq_state.spthy
+*/
+begin
+
+builtins: symmetric-encryption
+
+// One carrier fact packs phase, histories, epochs, marks, and budget.
+//   State_Progress(phase, histA, histB, epochA, epochB, markA, markB, budget)
+
+rule Init:
+    [ Fr(~k) ]
+  --[ Start() ]->
+    [ State_Progress(<'pre','a0','b0','e0','e0','m0','m0','full'>), !Key(~k) ]
+
+rule PreChallengeQuery:
+    let s = <ph, ha, hb, ea, eb, ma, mb, bud> in
+    [ State_Progress(s), !Key(k), In(m) ]
+  --[ PreQuery(m) ]->
+    [ State_Progress(<ph, <ha,m>, hb, ea, eb, ma, mb, bud>), Out(senc(m, k)) ]
+
+rule Challenge:
+    let s = <'pre', ha, hb, ea, eb, ma, mb, 'full'> in
+    [ State_Progress(s), Fr(~c0), Fr(~c1), !Key(k) ]
+  --[ Challenged() ]->
+    [ State_Progress(<'post', ha, hb, ea, eb, ma, mb, 'spent'>),
+      Out(senc(diff(~c0, ~c1), k)) ]
+
+rule PostChallengeQuery:
+    let s = <'post', ha, hb, ea, eb, ma, mb, bud> in
+    [ State_Progress(s), !Key(k), In(m2) ]
+  --[ PostQuery(m2) ]->
+    [ State_Progress(<'post', ha, <hb,m2>, ea, eb, ma, mb, bud>),
+      Out(senc(m2, k)) ]
+
+end

@@ -1,0 +1,10 @@
+# Static checks (audit tool, drivers, self-tests) use only the Python 3
+# standard library, so a bare Python 3.8+ interpreter suffices for the
+# quick-start path (scripts/verify_all_evidence.sh).
+#
+# The following are needed only for the full dynamic reproduction with
+# Tamarin (scripts/reproduce_all.sh):
+psutil>=5.9        # peak-RSS sampling in the robustness battery
+#
+# Optional developer tooling:
+pytest>=7.0 ; python_version >= "3.8"   # the self-tests also run standalone

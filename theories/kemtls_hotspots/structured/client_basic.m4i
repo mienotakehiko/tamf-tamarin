@@ -1,0 +1,17 @@
+// Origin: KEMTLS-TLS13Tamarin model/client_basic.m4i
+// Derived-from: TLS13Tamarin rev21 model/client.m4i
+// STRUCTURED variant: kdf_context carried as one field of the existing
+// State_ carrier macro (rule-compliant packaging; clears R1 + R4).
+include(`state.m4i')
+
+rule Client_Send_Structured:
+    let st = <cid, ~cr, kdf_ctx> in
+    [ Fr(~cr), State_Client(<cid, 'init', 'nil'>), Reveal(ltk) ]
+  --[ ClientSend(~cr) ]->
+    [ State_Client(<cid, ~cr, kdf_ctx>), Out(~cr) ]
+
+rule Client_Recv_Structured:
+    let st = <cid, cr, kdf_ctx> in
+    [ In(sr), State_Client(<cid, cr, kdf_ctx>) ]
+  --[ ClientRecv(sr) ]->
+    [ State_Client(<cid, cr, <kdf_ctx, sr>>) ]

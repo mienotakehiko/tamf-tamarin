@@ -1,0 +1,14 @@
+VALIDATION: PASS_WITH_REGISTERED_DEVIATION
+original_summary_rows=30
+supported_cells=24
+invalid_p_cells_documented=6
+invalid_p_classification=INVALID_HEURISTIC_NOT_PROOF_RESULT
+supported_technical_failures=0
+valid_derivcheck_complete_markers=24/24
+valid_proof_search_started=3/24
+warnings=0
+
+Deviation:
+The pre-registered p ranking was rejected by Tamarin 1.12.0 in --diff mode.
+The six p attempts are retained as invalid-factor evidence and are not
+reclassified as VERIFIED, TIMEOUT, or FALSIFIED.

@@ -1,0 +1,11 @@
+// TAMF heuristic tactic: the state-carrier abstraction is deliberately
+// co-designed with Tamarin's built-in 's' (smart) goal ranking. Per the
+// Robustness Battery, --heuristic=s is a NECESSARY scope condition for the
+// representation-level separation to be observable; the three alternative
+// supported rankings {S, c, C} both time out (SECONDARY verdict).
+//
+// This file documents the intended invocation; the 's' ranking itself is
+// Tamarin-native and needs no custom tactic. Kept for provenance/audit.
+tactic: smart
+ranking: s
+note: "co-design contract; see preregistration/robustness_battery.md"

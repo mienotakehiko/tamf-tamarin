@@ -1,0 +1,13 @@
+// FLAT variant: kdf_context threaded as rule-local KdfContext facts.
+// Deliberately rule-violating packaging (raises R1 + R4 in the audit).
+// No Origin/Derived-from/Ported-from provenance header; no include().
+
+rule Client_Send_Flat:
+    [ Fr(~cr), KdfContext(ctx), Reveal(ltk) ]
+  --[ ClientSend(~cr) ]->
+    [ KdfContext(<ctx, ~cr>), Out(<~cr, ctx>) ]
+
+rule Client_Recv_Flat:
+    [ In(sr), KdfContext(ctx) ]
+  --[ ClientRecv(sr) ]->
+    [ KdfContext(<ctx, sr>) ]

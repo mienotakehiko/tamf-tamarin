@@ -1,0 +1,49 @@
+theory ObsEq_Raw
+/*
+  Bounded four-query pre/post-challenge observational-equivalence benchmark.
+  RAW encoding: eight linear state premises scattered across the multiset.
+  This is condition A / B (no TAMF state carrier). Under --heuristic=s and a
+  300 s outer budget, this encoding TIMES OUT (24/24 across the four-budget
+  curve {60,120,300,600}s in the paper). Verify with:
+
+      tamarin-prover --prove --diff --heuristic=s obseq_raw.spthy
+
+  Proving Observational_equivalence under --diff. NOT an unbounded IND-CCA2
+  theorem: the benchmark has two pre- and two post-challenge stages.
+*/
+begin
+
+builtins: symmetric-encryption
+
+// --- eight scattered linear state facts (the "raw" packaging) ---
+//   RawPhase, RawHistA/B, RawEpochA/B, RawMarkA/B, RawBudget
+
+rule Init:
+    [ Fr(~k) ]
+  --[ Start() ]->
+    [ RawPhase($p0), RawHistA('a0'), RawHistB('b0'),
+      RawEpochA('e0'), RawEpochB('e0'),
+      RawMarkA('m0'), RawMarkB('m0'), RawBudget('full'),
+      !Key(~k) ]
+
+rule PreChallengeQuery:
+    [ RawPhase(p), RawHistA(ha), RawEpochA(ea), RawMarkA(ma), RawBudget(b),
+      !Key(k), In(m) ]
+  --[ PreQuery(m) ]->
+    [ RawPhase(p), RawHistA(<ha, m>), RawEpochA(ea), RawMarkA(ma),
+      RawBudget(b), Out(senc(m, k)) ]
+
+rule Challenge:
+    [ RawPhase(p), RawBudget('full'), Fr(~c0), Fr(~c1), !Key(k) ]
+  --[ Challenged() ]->
+    [ RawPhase('post'), RawBudget('spent'),
+      Out(senc(diff(~c0, ~c1), k)) ]
+
+rule PostChallengeQuery:
+    [ RawPhase('post'), RawHistB(hb), RawEpochB(eb), RawMarkB(mb),
+      !Key(k), In(m2) ]
+  --[ PostQuery(m2) ]->
+    [ RawPhase('post'), RawHistB(<hb, m2>), RawEpochB(eb), RawMarkB(mb),
+      Out(senc(m2, k)) ]
+
+end

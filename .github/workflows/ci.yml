@@ -1,0 +1,28 @@
+name: tamf-artefact-ci
+on: [push, pull_request]
+jobs:
+  static-reproducibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Audit-tool self-tests
+        run: python3 tests/test_audit_tool.py
+      - name: Audit tool on hotspot fixtures
+        run: |
+          python3 scripts/audit_tool.py theories/kemtls_hotspots/flat       --registry registry/tls_family.json
+          python3 scripts/audit_tool.py theories/kemtls_hotspots/structured --registry registry/tls_family.json
+      - name: Diff-surface metric
+        run: python3 scripts/diff_surface.py theories/kemtls_hotspots/flat/client_basic.m4i theories/kemtls_hotspots/structured/client_basic.m4i
+      - name: Driver dry-runs (no Tamarin on CI)
+        run: |
+          python3 scripts/run_ablation.py --dry-run
+          python3 scripts/run_robustness_battery.py --dry-run
+          python3 scripts/run_phase2.py --experiment P2-K --dry-run
+      - name: Pin + verify digests
+        run: |
+          bash scripts/pin_digests.sh
+          bash scripts/verify_all_evidence.sh

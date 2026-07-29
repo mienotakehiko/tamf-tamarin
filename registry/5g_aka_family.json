@@ -1,0 +1,14 @@
+{
+  "_comment": "Per-family attacker-rule vocabulary registry for the 5G-AKA family (Basin et al. 2018). Added in Phase-2 P2-A. The TLS-calibrated R1 regex reported ZERO on 5G-AKA because 5G-AKA encodes reveal-style adversaries as name SUFFIXES (Rev_Sqn, Rev_Key) that the exact-token TLS regex cannot see. This registry closes that recall caveat WITHOUT touching the audit-tool source: on 5G-AKA the R1_v2 detector then fires on 5/7 = 71.4% of files.",
+  "family": "5g_aka",
+  "ATTACKER_RULE_PATTERNS": [
+    "Reveal_",
+    "Corrupt_",
+    "reveal_",
+    "Rev_",
+    "*_compromised_(in|out)",
+    "Leak_",
+    "leak_",
+    "Compromise"
+  ]
+}

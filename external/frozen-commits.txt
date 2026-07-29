@@ -1,0 +1,24 @@
+# External artefacts used by the manuscript are NOT vendored in this
+# repository, to respect their upstream licences and to avoid staleness.
+# Every commit below is frozen so that reproduction is deterministic even
+# after upstream branches move on. The deterministic retrieval procedure is
+# documented in docs/getting-external-artefacts.md and automated by
+# scripts/fetch_external.sh.
+#
+# Format:
+#   <local-dir>            <upstream-url>                                        <commit-or-path>                             <upstream-licence>
+# --------------------------------------------------------------------------------------------------------------------------------------------
+
+kemtls-tls13tamarin        https://github.com/kemtls/KEMTLS-TLS13Tamarin.git      627744491482c497f853f69681dc67135ffa5e30    see-upstream
+tls13tamarin               https://github.com/tls13tamarin/TLS13Tamarin.git       master:src/rev21                             see-upstream
+5g-aka                     https://github.com/tamarin-prover/tamarin-prover.git   develop:examples/ccs18-5G                    see-upstream
+
+# Tool binaries (installed globally, not vendored):
+tamarin-prover-1.10.0      https://github.com/tamarin-prover/tamarin-prover.git   tag:1.10.0                                   GPL-3.0
+tamarin-prover-1.12.0      https://github.com/tamarin-prover/tamarin-prover.git   tag:1.12.0                                   GPL-3.0
+maude-3.4                  https://github.com/SRI-CSL/Maude.git                   3.4                                          GPL-3.0
+
+# NOTE: the manuscript quotes short (8-hex) commit identifiers for readability;
+# the full 40-hex digests above are authoritative. The two KEMTLS variant trees
+# (flat / structured kdf_context propagation) are produced from the frozen
+# kemtls-tls13tamarin baseline by the patches under patches/ (see patches/README.md).

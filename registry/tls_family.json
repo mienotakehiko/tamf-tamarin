@@ -1,0 +1,14 @@
+{
+  "_comment": "Per-family attacker-rule vocabulary registry for the TLS family (KEMTLS-TLS13Tamarin and its TLS13Tamarin ancestor). This is the DEFAULT calibration of the R1 structural core; extending to a new family means adding a sibling registry, never editing the audit-tool source.",
+  "family": "tls",
+  "ATTACKER_RULE_PATTERNS": [
+    "Reveal",
+    "Corrupt",
+    "Compromise",
+    "Leak",
+    "Reveal_",
+    "Corrupt_",
+    "Compromise_",
+    "Leak_"
+  ]
+}

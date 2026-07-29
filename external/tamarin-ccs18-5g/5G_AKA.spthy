@@ -1,0 +1,11 @@
+theory FiveG_AKA_fixture
+begin
+// Reveal-style adversaries encoded as name SUFFIXES (Rev_Sqn, Rev_Key) --
+// invisible to the TLS-calibrated exact-token R1 regex, caught by R1_v2.
+rule Rev_Sqn:
+    [ !Sqn(id, sqn) ]--[ RevealSqn(id) ]->[ Out(sqn) ]
+rule Rev_Key:
+    [ !Ltk(id, k) ]--[ RevealKey(id) ]->[ Out(k) ]
+rule Normal_Send:
+    [ Fr(~n) ]--[ Send(~n) ]->[ Out(~n) ]
+end

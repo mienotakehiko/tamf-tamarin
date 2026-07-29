@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+evidence/**/run_report.json
+evidence/summary.tsv
+evidence/battery_report_v3.json
+external/*/          # non-vendored external artefacts (fetched on demand)
+!external/frozen-commits.txt
+.DS_Store
+.pytest_cache/
+__pycache__/
