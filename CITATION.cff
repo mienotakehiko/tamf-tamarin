@@ -7,4 +7,15 @@ authors:
     orcid: "https://orcid.org/0009-0002-1646-2333"
     affiliation: "EPSON AVASYS Corporation, Nagano, Japan"
 license: "Apache-2.0"
-repository-code: "https://github.com/mienotakehiko/tamf-tamarin.git"
+repository-code: "https://github.com/USER/tamf"
+# Complete after minting the DOI on Zenodo (see README §10):
+#   doi          -> the version DOI for the tagged snapshot
+#   identifiers  -> also record the concept DOI (latest-version alias)
+doi: "10.5281/zenodo.XXXXXXX"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.XXXXXXX"
+    description: "Version DOI (this tagged snapshot)"
+  - type: doi
+    value: "10.5281/zenodo.YYYYYYY"
+    description: "Concept DOI (always resolves to the latest version)"

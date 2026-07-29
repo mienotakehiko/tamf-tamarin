@@ -1,0 +1,21 @@
+% Table R1: Heuristic sweep matrix (auto-generated)
+\begin{table}[tb]
+\centering
+\caption{Robustness Battery B1: heuristic sweep on A (raw) and C (carrier) variants. Three counter-balanced repetitions per cell at 300\,s outer budget with \texttt{--derivcheck-timeout=30}, \texttt{--stop-on-trace=dfs}, Tamarin~1.12.0.}
+\label{tab:robustness-battery-r1}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lcccc@{}}
+\hline
+Heuristic & \multicolumn{2}{c}{A (raw)} & \multicolumn{2}{c}{C (carrier)} \\
+ & Outcome & Wall (s) & Outcome & Wall (s) \\
+\hline
+\texttt{s} & 3/3 timeout & --- & 3/3 verified & 58.40 \\
+\texttt{S} & 3/3 timeout & --- & 3/3 timeout & --- \\
+\texttt{c} & 3/3 timeout & --- & 3/3 timeout & --- \\
+\texttt{C} & 3/3 timeout & --- & 3/3 timeout & --- \\
+\texttt{p} & 0/3 timeout & --- & 0/3 timeout & --- \\
+\hline
+\end{tabular}
+\end{table}

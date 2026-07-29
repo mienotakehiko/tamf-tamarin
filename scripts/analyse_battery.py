@@ -13,13 +13,15 @@ Emits:
                               cover letter / evidence bundle
   runs/table_R1.tex           LaTeX fragment for Table R1 (heuristic sweep matrix)
   runs/table_R2.tex           LaTeX fragment for Table R2 (phase-timing split)
-  runs/battery_verdict.txt    one of PRIMARY / PARTIAL_PRIMARY / MIXED / SECONDARY
+  runs/battery_verdict.txt    one of PRIMARY / SECONDARY / NULL
 
-Verdict rules (matches the pre-registered §3.4bis interpretation logic):
-  PRIMARY          : all A cells TIMEOUT (15/15) AND all C cells VERIFIED (15/15)
-  PARTIAL_PRIMARY  : all A TIMEOUT AND >=13/15 C VERIFIED (or symmetric)
-  MIXED            : any A VERIFIED  OR  any C TIMEOUT (bounded to specific heuristics)
-  SECONDARY        : both sides mostly flip -> re-inspect design
+Verdict rubric (as pre-registered in preregistration/robustness_battery.md):
+  the representation-level separation "holds" under a supported ranking when
+  every A cell TIMEOUTs and every C cell VERIFIEs for that ranking. Counting
+  over the supported set {s, S, c, C} (the invalid `p` factor is excluded):
+    PRIMARY   : separation holds under >= 2 supported rankings
+    SECONDARY : separation holds under exactly 1 supported ranking
+    NULL      : separation holds under none
 """
 from __future__ import annotations
 import argparse
@@ -102,16 +104,28 @@ def main() -> int:
                 all_walls_c.extend(walls if outcomes.count("VERIFIED") == len(outcomes) else [])
 
     # ------------------------------------------------------------------
-    # Verdict
+    # Verdict (pre-registered rubric: count supported rankings under which
+    # the A-timeout / C-verified separation holds; `p` is excluded).
     # ------------------------------------------------------------------
-    if a_all_timeout and c_all_verified:
+    supported = ["s", "S", "c", "C"]
+    separation_rankings = []
+    for h in supported:
+        a_cell = per_cell.get(f"A_h{h}")
+        c_cell = per_cell.get(f"C_h{h}")
+        if not a_cell or not c_cell:
+            continue
+        a_all_to = a_cell["n_reps"] > 0 and a_cell["n_timeout"] == a_cell["n_reps"]
+        c_all_ver = c_cell["n_reps"] > 0 and c_cell["n_verified"] == c_cell["n_reps"]
+        if a_all_to and c_all_ver:
+            separation_rankings.append(h)
+
+    n_separation = len(separation_rankings)
+    if n_separation >= 2:
         verdict = "PRIMARY"
-    elif a_all_timeout and n_c_timeout <= 2:
-        verdict = "PARTIAL_PRIMARY"
-    elif n_a_verified >= 1 or n_c_timeout >= 3:
-        verdict = "MIXED"
-    else:
+    elif n_separation == 1:
         verdict = "SECONDARY"
+    else:
+        verdict = "NULL"
 
     a_verified_cells = [k for k, v in per_cell.items()
                         if v["variant"] == "A" and v["n_verified"] > 0]
@@ -123,6 +137,8 @@ def main() -> int:
     # ------------------------------------------------------------------
     report = {
         "verdict":            verdict,
+        "separation_rankings": separation_rankings,
+        "n_separation_rankings": n_separation,
         "n_A_verified_total": n_a_verified,
         "n_C_timeout_total":  n_c_timeout,
         "a_verified_cells":   a_verified_cells,
