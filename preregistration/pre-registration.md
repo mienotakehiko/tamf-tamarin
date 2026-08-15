@@ -123,7 +123,7 @@ comments on the mechanism-level attribution of Contribution C2.
 
 ### A1 — Wall-clock co-growth analysis for the timeout-curve
 
-**Trigger**: strict-review comment that peak-RSS monotone growth on A
+**Trigger**: An internal strict review comment that peak-RSS monotone growth on A
 (raw) could be a GHC generational-GC watermark artefact rather than
 proof-search state expansion.
 
@@ -158,7 +158,7 @@ B3 caveat referenced inline.
 
 ### A2 — Mechanism-level attribution of the RSS shoulder under `-S`/`-c`
 
-**Trigger**: strict-review comment that the previous wording
+**Trigger**: An internal strict review comment that the wording
 ("plausible cache-inflation mechanism" for the 21–22 GiB peak RSS on the
 carrier under `-S` and `-c`) attributes an internal mechanism to Tamarin
 without evidence that could be gathered from `--diff`-mode observations
