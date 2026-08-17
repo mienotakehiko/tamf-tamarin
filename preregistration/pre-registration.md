@@ -161,7 +161,7 @@ of the pre-registered battery and is disclosed as future work.
 
 **Impact on verdict**: none. The SECONDARY verdict, the four-verdict
 interpretation table, and the pre-committed manuscript action are all
-unchanged. The revised manuscript text of §3.4 (Robustness Battery
+unchanged. The manuscript text of §3.4 (Robustness Battery
 Verdict paragraph) records the RSS shoulder as an empirical pattern and
 disclaims mechanistic attribution.
 
