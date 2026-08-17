@@ -75,24 +75,11 @@ state-representation causal claim (Contribution C2):
 | A: 15/15 timeout **AND** C: 15/15 verified                            | `PRIMARY`          | C2 upgrades to "bounded and heuristic-robust across `{s, S, c, C, p}`"                                                  |
 | A: 15/15 timeout **AND** C: 13–14/15 verified                         | `PARTIAL_PRIMARY`  | C2 keeps causal reading; add "C verifies in 13(or 14)/15 attempts; residual 1–2 timeouts occur in cells {…}"            |
 | Any A verifies **OR** C timeout count ≥ 3                              | `MIXED`            | C2 narrows to a specific heuristic subset {…} and adds one entry to the forbidden-overclaim list                       |
-| A verifies in ≥ 8 cells **OR** C times out in ≥ 8 cells                | `SECONDARY`        | Design revision required; report as a null result and re-consult reviewer before manuscript submission                 |
+| A verifies in ≥ 8 cells **OR** C times out in ≥ 8 cells                | `SECONDARY`        | Design revision required; report as a null result               |
 
 All four verdicts are covered a priori; there is no verdict category
 without a pre-committed manuscript action. The `analyse_battery.py` script
 computes the verdict mechanically from `summary.tsv`.
-
-## Pre-committed manuscript text sketch (subject only to verdict category)
-
-- **§3.4bis intro**: three-sentence statement of B1/B2/B3 design and its
-  three-confound remit; unchanged regardless of verdict.
-- **§3.4bis B1 results**: one paragraph reporting the 5×2 outcome matrix;
-  wording template selected by verdict.
-- **§3.4bis B2 results**: one paragraph reporting phase-timing summary
-  (`< 10 s` in all A/B/C/D cells if the marker fires; else explicit numbers).
-- **§3.4bis B3 disclosure**: one sentence stating the peak-RSS bound.
-- **§3.4bis closing**: one sentence stating the residual bounds
-  ("under the tested heuristic set {`s, S, c, C, p`} and the tested budget"),
-  never claiming heuristic invariance beyond that set.
 
 ## Deviations and how they are handled
 
