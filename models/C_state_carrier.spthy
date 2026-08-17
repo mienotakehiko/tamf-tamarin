@@ -1,4 +1,4 @@
-// Day-2 bounded observational-equivalence benchmark v2.5
+// Bounded observational-equivalence benchmark v2.5
 // Query budget: two pre-challenge and two post-challenge decryption queries.
 theory IND_CCA2_Adaptive_STATE_ONLY
 begin
